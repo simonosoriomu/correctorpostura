@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrector de Postura IA</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
+</head>
+<body>
+    <!-- Modal de Consentimiento -->
+    <div id="consent-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Aviso de Privacidad</h2>
+            <p>¿Autorizas el tratamiento de fotos personales para el uso de esta página? <br><br><small><i>Nota: Todas las imágenes se procesarán <strong>únicamente de forma local en tu computador</strong> y nunca serán enviadas a servidores externos.</i></small></p>
+            <div id="consent-actions" class="modal-actions">
+                <button id="btn-accept-consent" class="btn btn-primary">Aceptar</button>
+                <button id="btn-decline-consent" class="btn btn-secondary">No Aceptar</button>
+            </div>
+            <div id="consent-denied-message" class="hidden error-message">
+                <p>⚠️ No puedes hacer uso de la página sin autorizar el tratamiento de datos. Por favor, recarga la página si cambias de opinión.</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="app-header">
+        <div class="container">
+            <h1>Corrector de Postura</h1>
+            <p>Entrena una Inteligencia Artificial en tu navegador para detectar si estás sentado correctamente.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- SECCIÓN 1: ENTRENAMIENTO -->
+        <section id="training-section" class="card">
+            <div class="card-header">
+                <h2>1. Entrenar modelo</h2>
+                <p>Sube imágenes para cada postura. Todas se procesan de forma privada en tu computador.</p>
+            </div>
+            
+            <div class="upload-grid">
+                <div class="upload-card">
+                    <h3>✓ Postura Correcta</h3>
+                    <p class="count-badge" id="count-correct">0 imágenes</p>
+                    <input type="file" id="upload-correct" accept="image/*" multiple class="hidden">
+                    <button class="btn btn-secondary" onclick="document.getElementById('upload-correct').click()">Subir imágenes</button>
+                    <div class="thumbnails" id="thumbs-correct"></div>
+                </div>
+
+                <div class="upload-card">
+                    <h3>⚠️ Inclinado Adelante</h3>
+                    <p class="count-badge" id="count-forward">0 imágenes</p>
+                    <input type="file" id="upload-forward" accept="image/*" multiple class="hidden">
+                    <button class="btn btn-secondary" onclick="document.getElementById('upload-forward').click()">Subir imágenes</button>
+                    <div class="thumbnails" id="thumbs-forward"></div>
+                </div>
+
+                <div class="upload-card">
+                    <h3>⚠️ Inclinado Atrás</h3>
+                    <p class="count-badge" id="count-backward">0 imágenes</p>
+                    <input type="file" id="upload-backward" accept="image/*" multiple class="hidden">
+                    <button class="btn btn-secondary" onclick="document.getElementById('upload-backward').click()">Subir imágenes</button>
+                    <div class="thumbnails" id="thumbs-backward"></div>
+                </div>
+            </div>
+
+            <div class="train-action">
+                <button id="btn-train" class="btn btn-primary btn-large">ENTRENAR MODELO</button>
+                <div id="training-status" class="status-message hidden">
+                    <!-- Aquí mostraremos el progreso -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: DETECCIÓN -->
+        <section id="detection-section" class="card disabled">
+            <div class="card-header">
+                <h2>2. Detectar postura</h2>
+                <p>Activa tu cámara para probar el modelo en tiempo real.</p>
+            </div>
+            
+            <div class="detection-container">
+                <div class="camera-wrapper">
+                    <div id="camera-placeholder">
+                        <p>La cámara está apagada</p>
+                        <button id="btn-start-camera" class="btn btn-primary">Activar Cámara</button>
+                    </div>
+                    <video id="webcam" autoplay playsinline width="400" height="300" class="hidden"></video>
+                </div>
+
+                <div class="status-wrapper">
+                    <div id="posture-alert" class="alert-box neutral">
+                        <h3>Esperando cámara...</h3>
+                        <p id="posture-confidence">Confianza: --%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

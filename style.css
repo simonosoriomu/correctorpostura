@@ -1,0 +1,325 @@
+/* Variables CSS - Paleta Moderna en Azules */
+:root {
+    --primary-color: #2563eb; /* Azul brillante */
+    --primary-hover: #1d4ed8;
+    --secondary-color: #eff6ff; /* Azul muy claro */
+    --secondary-text: #1e3a8a; /* Azul muy oscuro */
+    
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #334155;
+    --text-light: #64748b;
+    
+    --success-color: #22c55e;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    
+    --border-radius: 12px;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.app-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.app-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.app-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Tarjetas (Secciones) */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.card.disabled {
+    opacity: 0.5;
+    pointer-events: none; /* Previene interacción hasta que se entrene */
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.card-header h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+}
+
+.card-header p {
+    color: var(--text-light);
+}
+
+/* Botones */
+.btn {
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--secondary-text);
+}
+
+.btn-secondary:hover {
+    background-color: #dbeafe;
+}
+
+.btn-primary:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.btn-large {
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+}
+
+/* Sección Entrenamiento */
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.upload-card {
+    background: var(--bg-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 2px dashed #cbd5e1;
+}
+
+.upload-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.count-badge {
+    display: inline-block;
+    background: var(--secondary-color);
+    color: var(--secondary-text);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Miniaturas */
+.thumbnails {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+}
+
+.thumb-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+}
+
+.train-action {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.status-message {
+    margin-top: 1rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+/* Sección Detección */
+.detection-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.camera-wrapper {
+    width: 400px;
+    height: 300px;
+    background: #000;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+}
+
+#camera-placeholder {
+    text-align: center;
+    color: white;
+}
+
+#camera-placeholder p {
+    margin-bottom: 1rem;
+}
+
+video#webcam {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1); /* Efecto espejo */
+}
+
+/* Alertas de Postura */
+.status-wrapper {
+    flex: 1;
+    min-width: 250px;
+}
+
+.alert-box {
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    color: white;
+    transition: all 0.3s;
+}
+
+.alert-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    white-space: pre-line;
+}
+
+.alert-box.neutral { background-color: var(--text-light); }
+.alert-box.success { background-color: var(--success-color); }
+.alert-box.warning { background-color: var(--warning-color); }
+.alert-box.danger { background-color: var(--danger-color); }
+
+/* Utilidades */
+.hidden { display: none !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .detection-container {
+        flex-direction: column;
+    }
+    .camera-wrapper {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        aspect-ratio: 4/3;
+    }
+}
+
+/* Modal de Consentimiento */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    max-width: 550px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    margin: 0 20px;
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.modal-content p {
+    margin-bottom: 2rem;
+    color: var(--text-main);
+    font-size: 1.1rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.error-message {
+    color: var(--danger-color);
+    font-weight: 500;
+    background: #fef2f2;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border: 1px solid #fecaca;
+}
+
+body.modal-open {
+    overflow: hidden; /* Evita hacer scroll mientras el modal esté abierto */
+}
