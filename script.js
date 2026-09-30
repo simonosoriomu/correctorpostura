@@ -19,11 +19,7 @@ const CLASS_LABELS = ['Postura Correcta', 'Inclinado Adelante', 'Inclinado Atrá
 const ALERT_THRESHOLD = 5; // Cantidad de frames seguidos con mala postura para lanzar alerta
 
 // Referencias DOM
-const fileInputs = {
-    correct: document.getElementById('upload-correct'),
-    forward: document.getElementById('upload-forward'),
-    backward: document.getElementById('upload-backward')
-};
+const captureBtns = document.querySelectorAll('.capture-btn');
 const counts = {
     correct: document.getElementById('count-correct'),
     forward: document.getElementById('count-forward'),
@@ -34,6 +30,11 @@ const thumbsContainers = {
     forward: document.getElementById('thumbs-forward'),
     backward: document.getElementById('thumbs-backward')
 };
+
+const btnStartTrainCamera = document.getElementById('btn-start-train-camera');
+const trainCameraPlaceholder = document.getElementById('train-camera-placeholder');
+const trainWebcamElement = document.getElementById('train-webcam');
+const captureControls = document.getElementById('capture-controls');
 
 const btnTrain = document.getElementById('btn-train');
 const trainingStatus = document.getElementById('training-status');
@@ -48,6 +49,7 @@ const alertHeading = postureAlert.querySelector('h3');
 // IA Models
 let mobilenet;
 let customModel;
+let globalStream = null;
 
 // Inicialización de la aplicación
 async function init() {
@@ -55,47 +57,69 @@ async function init() {
     trainingStatus.innerText = "Cargando modelo base de IA...";
     
     try {
-        // Cargamos MobileNet, lo usamos solo como extractor de características (truncado)
         const mobilenetRaw = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json');
-        
-        // Obtenemos una capa intermedia para usarla como salida de extracción de características
         const layer = mobilenetRaw.getLayer('conv_pw_13_relu');
         mobilenet = tf.model({inputs: mobilenetRaw.inputs, outputs: layer.output});
         
-        trainingStatus.innerText = "IA lista. Por favor, sube imágenes para las tres posturas.";
+        trainingStatus.innerText = "IA lista. Por favor enciende la cámara para entrenar.";
     } catch (e) {
         trainingStatus.innerText = "Error cargando la IA. Revisa tu conexión a internet.";
         console.error(e);
     }
 }
 
-// Escuchar cargas de archivos
-CLASSES.forEach(className => {
-    fileInputs[className].addEventListener('change', (e) => handleImageUpload(e, className));
+// --- LÓGICA DE CAPTURA EN VIVO ---
+btnStartTrainCamera.addEventListener('click', async () => {
+    try {
+        globalStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        trainWebcamElement.srcObject = globalStream;
+        trainWebcamElement.classList.remove('hidden');
+        trainCameraPlaceholder.classList.add('hidden');
+        
+        // Habilitar los controles de captura
+        captureControls.classList.remove('disabled-grid');
+        captureBtns.forEach(btn => btn.disabled = false);
+        btnTrain.disabled = false;
+        
+        trainingStatus.innerText = "Cámara lista. Captura al menos 10-20 imágenes para cada postura.";
+    } catch (e) {
+        console.error(e);
+        alert("No se pudo acceder a la cámara. Asegúrate de dar permisos.");
+    }
 });
 
-function handleImageUpload(event, className) {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
+// Asignar evento a los botones de captura
+captureBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const className = e.target.getAttribute('data-class');
+        captureFrame(className);
+    });
+});
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
-        
-        reader.onload = (e) => {
-            const imgElement = document.createElement('img');
-            imgElement.src = e.target.result;
-            imgElement.className = 'thumb-img';
-            imgElement.onload = () => {
-                // Guardamos la imagen en nuestro estado
-                state.images[className].push(imgElement);
-                // Actualizamos UI
-                counts[className].innerText = `${state.images[className].length} imágenes`;
-                thumbsContainers[className].appendChild(imgElement);
-            };
-        };
-        reader.readAsDataURL(file);
-    }
+function captureFrame(className) {
+    if (!trainWebcamElement.srcObject) return;
+
+    // Crear un canvas para extraer el frame actual del video
+    const canvas = document.createElement('canvas');
+    canvas.width = trainWebcamElement.videoWidth;
+    canvas.height = trainWebcamElement.videoHeight;
+    const ctx = canvas.getContext('2d');
+    
+    // Dibujar el frame actual
+    ctx.drawImage(trainWebcamElement, 0, 0, canvas.width, canvas.height);
+    
+    // Convertir a imagen
+    const imgElement = document.createElement('img');
+    imgElement.src = canvas.toDataURL('image/jpeg');
+    imgElement.className = 'thumb-img';
+    
+    imgElement.onload = () => {
+        // Guardamos la imagen en nuestro estado
+        state.images[className].push(imgElement);
+        // Actualizamos UI
+        counts[className].innerText = `${state.images[className].length} imágenes`;
+        thumbsContainers[className].appendChild(imgElement);
+    };
 }
 
 // Botón de entrenar
@@ -221,14 +245,21 @@ btnStartCamera.addEventListener('click', async () => {
     if (!state.modelTrained) return;
     
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        webcamElement.srcObject = stream;
+        // Si ya hay un stream global del entrenamiento, lo reutilizamos
+        if (!globalStream) {
+            globalStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        }
+        
+        webcamElement.srcObject = globalStream;
         webcamElement.classList.remove('hidden');
         cameraPlaceholder.classList.add('hidden');
         
         state.isPredicting = true;
         // Iniciar loop de predicción una vez que el video pueda reproducirse
         webcamElement.addEventListener('loadeddata', predictLoop);
+        
+        // Desplazarse suavemente a la sección de detección
+        detectionSection.scrollIntoView({ behavior: 'smooth' });
         
     } catch (e) {
         console.error(e);
