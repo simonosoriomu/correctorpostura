@@ -35,38 +35,42 @@
         <!-- SECCIÓN 1: ENTRENAMIENTO -->
         <section id="training-section" class="card">
             <div class="card-header">
-                <h2>1. Entrenar modelo</h2>
-                <p>Sube imágenes para cada postura. Todas se procesan de forma privada en tu computador.</p>
+                <h2>1. Entrenar modelo (Captura en vivo)</h2>
+                <p>Enciende la cámara y toma fotos en tiempo real para cada postura.</p>
             </div>
             
-            <div class="upload-grid">
+            <div class="training-camera-wrapper" id="training-camera-container">
+                <div id="train-camera-placeholder">
+                    <button id="btn-start-train-camera" class="btn btn-primary">Encender Cámara para Entrenar</button>
+                </div>
+                <video id="train-webcam" autoplay playsinline width="400" height="300" class="hidden"></video>
+            </div>
+
+            <div class="upload-grid disabled-grid" id="capture-controls">
                 <div class="upload-card">
                     <h3>✓ Postura Correcta</h3>
                     <p class="count-badge" id="count-correct">0 imágenes</p>
-                    <input type="file" id="upload-correct" accept="image/*" multiple class="hidden">
-                    <button class="btn btn-secondary" onclick="document.getElementById('upload-correct').click()">Subir imágenes</button>
+                    <button class="btn btn-secondary capture-btn" data-class="correct" disabled>📸 Capturar</button>
                     <div class="thumbnails" id="thumbs-correct"></div>
                 </div>
 
                 <div class="upload-card">
                     <h3>⚠️ Inclinado Adelante</h3>
                     <p class="count-badge" id="count-forward">0 imágenes</p>
-                    <input type="file" id="upload-forward" accept="image/*" multiple class="hidden">
-                    <button class="btn btn-secondary" onclick="document.getElementById('upload-forward').click()">Subir imágenes</button>
+                    <button class="btn btn-secondary capture-btn" data-class="forward" disabled>📸 Capturar</button>
                     <div class="thumbnails" id="thumbs-forward"></div>
                 </div>
 
                 <div class="upload-card">
                     <h3>⚠️ Inclinado Atrás</h3>
                     <p class="count-badge" id="count-backward">0 imágenes</p>
-                    <input type="file" id="upload-backward" accept="image/*" multiple class="hidden">
-                    <button class="btn btn-secondary" onclick="document.getElementById('upload-backward').click()">Subir imágenes</button>
+                    <button class="btn btn-secondary capture-btn" data-class="backward" disabled>📸 Capturar</button>
                     <div class="thumbnails" id="thumbs-backward"></div>
                 </div>
             </div>
 
             <div class="train-action">
-                <button id="btn-train" class="btn btn-primary btn-large">ENTRENAR MODELO</button>
+                <button id="btn-train" class="btn btn-primary btn-large" disabled>ENTRENAR MODELO</button>
                 <div id="training-status" class="status-message hidden">
                     <!-- Aquí mostraremos el progreso -->
                 </div>
