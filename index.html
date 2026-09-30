@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corrector de Postura IA</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
 </head>
@@ -21,6 +21,15 @@
             <div id="consent-denied-message" class="hidden error-message">
                 <p>⚠️ No puedes hacer uso de la página sin autorizar el tratamiento de datos. Por favor, recarga la página si cambias de opinión.</p>
             </div>
+        </div>
+    </div>
+
+    <!-- Alerta Llamativa Pantalla Completa -->
+    <div id="urgent-alert-overlay" class="hidden">
+        <div class="urgent-alert-box">
+            <span class="urgent-icon">⚠️</span>
+            <h2>CORRIGE TU POSTURA</h2>
+            <p id="urgent-alert-text"></p>
         </div>
     </div>
 
@@ -103,6 +112,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>

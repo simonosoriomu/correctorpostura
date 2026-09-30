@@ -46,6 +46,9 @@ const postureAlert = document.getElementById('posture-alert');
 const postureConfidence = document.getElementById('posture-confidence');
 const alertHeading = postureAlert.querySelector('h3');
 
+const urgentOverlay = document.getElementById('urgent-alert-overlay');
+const urgentText = document.getElementById('urgent-alert-text');
+
 // IA Models
 let mobilenet;
 let customModel;
@@ -315,11 +318,19 @@ function updateUI(predictedClass, confidence) {
     if (state.alertCounter > ALERT_THRESHOLD) {
         postureAlert.className = 'alert-box warning';
         alertHeading.innerText = `⚠️ CORRIGE TU POSTURA\n(${CLASS_LABELS[predictedClass]})`;
+        
+        // Mostrar alerta llamativa
+        urgentText.innerText = `ESTÁS ${CLASS_LABELS[predictedClass].toUpperCase()}`;
+        urgentOverlay.classList.remove('hidden');
+        
     } 
     // Si el contador es 0, mostramos correcta
     else if (state.alertCounter === 0) {
         postureAlert.className = 'alert-box success';
         alertHeading.innerText = "✓ Buena postura";
+        
+        // Ocultar alerta llamativa
+        urgentOverlay.classList.add('hidden');
     }
     // Si está entre 0 y el umbral, dejamos el estado anterior para evitar parpadeo
 }
