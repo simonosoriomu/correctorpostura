@@ -356,67 +356,52 @@ body.modal-open {
     overflow: hidden; /* Evita hacer scroll mientras el modal esté abierto */
 }
 
-/* --- Alerta Llamativa Pantalla Completa --- */
-#urgent-alert-overlay {
+/* --- Notificación estilo App (WhatsApp) --- */
+.toast-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none; /* Permite hacer clic a través de la alerta */
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    width: 320px;
     z-index: 9999;
+    border-left: 5px solid var(--danger-color);
+    
+    /* Estado inicial oculto a la derecha */
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-container.show {
+    /* Estado visible */
+    transform: translateX(0);
+}
+
+.toast-icon {
+    font-size: 1.8rem;
+    margin-right: 15px;
+    background-color: #fef2f2; /* Fondo rojizo suave */
+    padding: 10px;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: inset 0 0 50px rgba(239, 68, 68, 0.5); /* Borde rojo interior */
-    background-color: rgba(239, 68, 68, 0.15); /* Fondo rojizo translúcido */
-    animation: pulse-bg 1s infinite;
 }
 
-.urgent-alert-box {
-    background-color: var(--danger-color);
-    color: white;
-    padding: 3rem 5rem;
-    border-radius: 24px;
-    text-align: center;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-    animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+.toast-content h4 {
+    margin: 0 0 5px 0;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 700;
 }
 
-.urgent-alert-box h2 {
-    font-size: 3rem;
+.toast-content p {
     margin: 0;
-    text-transform: uppercase;
-    font-weight: 900;
-}
-
-.urgent-alert-box p {
-    font-size: 1.5rem;
-    margin-top: 0.5rem;
-    font-weight: 600;
-}
-
-.urgent-icon {
-    font-size: 5rem;
-    display: block;
-    margin-bottom: 1rem;
-    animation: shake 0.4s infinite;
-}
-
-/* Animaciones */
-@keyframes pop-in {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes pulse-bg {
-    0% { box-shadow: inset 0 0 50px rgba(239, 68, 68, 0.3); background-color: rgba(239, 68, 68, 0.1); }
-    50% { box-shadow: inset 0 0 120px rgba(239, 68, 68, 0.8); background-color: rgba(239, 68, 68, 0.25); }
-    100% { box-shadow: inset 0 0 50px rgba(239, 68, 68, 0.3); background-color: rgba(239, 68, 68, 0.1); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-15px) rotate(-5deg); }
-    75% { transform: translateX(15px) rotate(5deg); }
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.3;
 }

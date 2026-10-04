@@ -46,8 +46,8 @@ const postureAlert = document.getElementById('posture-alert');
 const postureConfidence = document.getElementById('posture-confidence');
 const alertHeading = postureAlert.querySelector('h3');
 
-const urgentOverlay = document.getElementById('urgent-alert-overlay');
-const urgentText = document.getElementById('urgent-alert-text');
+const toastNotification = document.getElementById('toast-notification');
+const toastText = document.getElementById('toast-text');
 
 // IA Models
 let mobilenet;
@@ -299,15 +299,16 @@ async function predictLoop() {
     requestAnimationFrame(predictLoop);
 }
 
+// Para evitar reproducir el sonido 60 veces por segundo, controlamos el estado
+let notificationIsShowing = false;
+
 function updateUI(predictedClass, confidence) {
     const classStr = CLASSES[predictedClass];
     
     // Lógica de suavizado (debouncing)
-    // Si la predicción es mala postura
     if (predictedClass === 1 || predictedClass === 2) {
         state.alertCounter++;
     } else {
-        // Si es correcta, reseteamos rápido el contador para quitar la alerta pronto
         state.alertCounter = 0;
     }
     
@@ -319,9 +320,20 @@ function updateUI(predictedClass, confidence) {
         postureAlert.className = 'alert-box warning';
         alertHeading.innerText = `⚠️ CORRIGE TU POSTURA\n(${CLASS_LABELS[predictedClass]})`;
         
-        // Mostrar alerta llamativa
-        urgentText.innerText = `ESTÁS ${CLASS_LABELS[predictedClass].toUpperCase()}`;
-        urgentOverlay.classList.remove('hidden');
+        // Mostrar notificación tipo App
+        toastText.innerText = `⚠️ Corrige tu postura: ${CLASS_LABELS[predictedClass]}`;
+        
+        if (!notificationIsShowing) {
+            toastNotification.classList.add('show');
+            notificationIsShowing = true;
+            
+            // Opcional: Reproducir un sonido sutil de notificación
+            try {
+                const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3');
+                audio.volume = 0.5;
+                audio.play();
+            } catch(e) {} // Ignorar si el navegador bloquea el autoplay
+        }
         
     } 
     // Si el contador es 0, mostramos correcta
@@ -329,10 +341,12 @@ function updateUI(predictedClass, confidence) {
         postureAlert.className = 'alert-box success';
         alertHeading.innerText = "✓ Buena postura";
         
-        // Ocultar alerta llamativa
-        urgentOverlay.classList.add('hidden');
+        // Ocultar notificación tipo App
+        if (notificationIsShowing) {
+            toastNotification.classList.remove('show');
+            notificationIsShowing = false;
+        }
     }
-    // Si está entre 0 y el umbral, dejamos el estado anterior para evitar parpadeo
 }
 
 // --- LÓGICA DE CONSENTIMIENTO ---

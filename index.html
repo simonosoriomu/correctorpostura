@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corrector de Postura IA</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <title>ErgoIA - Corrector de Postura</title>
+    <link rel="stylesheet" href="style.css?v=4">
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
 </head>
@@ -24,18 +24,18 @@
         </div>
     </div>
 
-    <!-- Alerta Llamativa Pantalla Completa -->
-    <div id="urgent-alert-overlay" class="hidden">
-        <div class="urgent-alert-box">
-            <span class="urgent-icon">⚠️</span>
-            <h2>CORRIGE TU POSTURA</h2>
-            <p id="urgent-alert-text"></p>
+    <!-- Notificación estilo App (WhatsApp) -->
+    <div id="toast-notification" class="toast-container">
+        <div class="toast-icon">⚠️</div>
+        <div class="toast-content">
+            <h4>ErgoIA</h4>
+            <p id="toast-text">Estás inclinado adelante.</p>
         </div>
     </div>
 
     <header class="app-header">
         <div class="container">
-            <h1>Corrector de Postura</h1>
+            <h1>ErgoIA</h1>
             <p>Entrena una Inteligencia Artificial en tu navegador para detectar si estás sentado correctamente.</p>
         </div>
     </header>
@@ -112,6 +112,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>
